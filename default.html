@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+  <head>
+    <link href="./storage/css/bootstrap.css" rel="stylesheet">
+	<link href="./storage/css/table.css" rel="stylesheet">
+    <link href="./storage/css/bootstrap-responsive.css" rel="stylesheet">
+	<script src="./storage/js/angular.js"></script>
+  </head>
+<body ng-controller="TictacToeGameController" onload="inigame();" >
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Simple Tic Tac Toe</a>
+          <div class="nav-collapse collapse">
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div></br></br>
+    <div class="container">
+	    <h2>Tic Tac Toe</h2>
+		<div class="form-group">
+			<label for="exampleInputEmail1">PLAYER1</label>
+			<input type="text" ng-change="changePlayer()" class="form-control" ng-model="player1" id="Player1" placeholder="Player1" >
+		</div>
+	  <div class="form-group">
+			<label for="exampleInputPassword1">PLAYER2</label>
+			<input type="text" class="form-control" ng-model="player2"id="Player2" placeholder="Player2">
+	  </div>
+          <div id="table">
+		  <div id="row1">
+		  <div id="d11" class="cell"><a  style="color:red" href="#" ng-click="clickrow('d11')" ng-class="{playing: row1[0].played == 'true'}">{{row1[0].title}}</a></div> 
+		  
+		  <div id="d12" class="cell"><a style="color:red" href="#"  ng-click="clickrow('d12')" ng-class="{playing: row1[1].played == 'true'}">{{row1[1].title}}</a></div> 
+		  
+		  <div id="d13" class="cell"><a style="color:red" href="#" ng-click="clickrow('d13')" ng-class="{playing: row1[2].played == 'true'}">{{row1[2].title}}</a></div>
+		  </div>
+		  
+		  <div id="row2">
+		  <div id="d21" class="cell"><a style="color:red" href="#" ng-click="clickrow('d21')" ng-class="{playing: row2[0].played == 'true'}">{{row2[0].title}}</a></div>
+		  
+		  <div id="d22" class="cell"><a style="color:red" href="#" ng-click="clickrow('d22')" ng-class="{playing: row2[1].played == 'true'}">{{row2[1].title}}</a></div>
+		  
+		  <div id="d23" class="cell"><a style="color:red" href="#" ng-click="clickrow('d23')" ng-class="{playing: row2[2].played == 'true'}">{{row2[2].title}}</a></div>
+		  </div>
+		  
+		  <div id="row3">
+		  
+		  <div id="d31" class="cell"><a style="color:red" href="#" ng-click="clickrow('d31')" ng-class="{playing: row3[0].played == 'true'}">{{row3[0].title}}</a></div>
+		  
+		  <div id="d32" class="cell"><a style="color:red" href="#" ng-click="clickrow('d32')" ng-class="{playing: row3[1].played == 'true'}">{{row3[1].title}}</a></div>
+		  
+		  <div id="d33" class="cell"><a style="color:red" href="#" ng-click="clickrow('d33')" ng-class="{playing: row3[2].played == 'true'}">{{row3[2].title}}</a></div>
+		  </div>
+		  
+		  </div>
+		  <div id="Simple Board">
+			  <div><b>Winner is:<b> {{winPlayer}}</div>
+		  <div>
+    </div> <!-- /container -->
+    <!-- bootstrap model -->
+    
+		 
+	  <div class="model1">
+		<h4>Player {{playing}} It is your turn</h4>
+	  </div>
+    <div class="bs-example" style="padding-bottom: 24px;">
+      <a class="btn btn-primary btn-lg" onclick="restart()">Reset the Game</a>
+    </div>
+	
+	<script src="./storage/js/jquery.js"></script>
+    <script src="./storage/js/bootstrap.js"></script>
+	
+	<script>
+	  //controller
+     function TictacToeGameController($scope)
+	 {
+	 $scope.test = "1";
+	 $scope.player="X";
+	 $scope.playing = $scope.player1;
+	 $scope.win = "";
+	 $scope.lost="";
+	 
+	  $scope.changePlayer = function() {
+	  $scope.playing = $scope.player1
+	  
+	  }
+	  $scope.row1 =  [{title: 'xod', played: 'false'},
+		               {title: 'xod',played: 'false'},
+					   {title: 'xod',played: 'false'}];
+	  $scope.row2 =  [{title: 'xod',played: 'false'},
+					  {title: 'xod',played: 'false'},
+					  {title: 'xod',played: 'false'}];
+	  $scope.row3 = [{title: 'xod',played: 'false'},
+				  {title: 'xod',played: 'false'},
+				  {title: 'xod',played: 'false' }];
+					   
+	   	 
+       $scope.winner = function()
+	   {
+	      var a = [
+		            [$scope.row1[0].title,$scope.row1[1].title, $scope.row1[2].title],
+					[$scope.row2[0].title,$scope.row2[1].title, $scope.row2[2].title],
+					[$scope.row3[0].title,$scope.row3[1].title, $scope.row3[2].title]
+					
+		          ]
+	      var matches = 1;
+	      //check the winner by evaluating who hit 3 in a line (vertical, horizontal, diagonal)
+		  //check horizontal
+		     //a. checking 1st array
+			 //b. checking 2nd array
+			 //c. checking 3rd array
+		   for (var i=0; i< 3;i++)
+		   {
+		     for (var j=0; j<3;j++)
+			 {
+			   if ((matches<=2)&& (j>0))
+			    {
+				  if ((a[i][j-1]==a[i][j])&&(a[i][j-1]!="xod"))
+				  {
+				    matches=matches+1;
+				  }
+				}
+			 }
+			 if (matches<3)
+			      matches=1;
+			 else
+			    { 
+                   $scope.test="winner";
+				   $scope.lost = $scope.player;
+				if ($scope.player=="X") {
+					 $scope.win = "O";
+					 $scope.winPlayer = $scope.player2;
+				}else {
+					 $scope.win = "X";
+					 $scope.winPlayer = $scope.player1;
+				}
+                return "winner";			 		 
+				}
+		   }
+		     
+		  //check vertical
+		  for (var i=0; i< 3;i++)
+		   {
+		     for (var j=0; j<3;j++)
+			 {
+			   if ((matches<=2)&& (j>0))
+			    {
+				  if ((a[j-1][i]==a[j][i])&&(a[j-1][i]!="xod"))
+				  {
+				    matches=matches+1;
+				  }
+				}
+			 }
+			 if (matches<3)
+			      matches=1;
+			 else
+			  {
+			    $scope.test="winner";
+				$scope.lost = $scope.player;
+				if ($scope.player=="X"){
+					 $scope.win = "O";
+					 $scope.winPlayer = $scope.player2;
+				}
+				else {
+					 $scope.win = "X";
+					 $scope.winPlayer = $scope.player1;
+				}
+
+				
+                return "winner";			 
+			  }
+		   }
+		  //check diagonal
+		  for (var i=0; i< 3;i++)
+		   {
+		    // for (var j=0; j<3;j++)
+			 //{
+			   if ((matches<=2)&& (i>0))
+			    {
+				  if ((a[i-1][i-1]==a[i][i])&&(a[i-1][i-1]!="xod"))
+				  {
+				    matches=matches+1;
+				  }
+				}
+			 //}
+			 if (i==2)
+			 {
+			 if (matches<3)
+			      matches=1;
+			 else
+			  {
+			    $scope.test="winner";
+				$scope.lost = $scope.player;
+				if ($scope.player=="X") {
+					 $scope.win = "O";
+					  $scope.winPlayer = $scope.player2;
+
+				} else {
+					 $scope.win = "X";
+					 $scope.winPlayer = $scope.player1;
+
+				}
+                return "winner";			 
+			  }
+			  }
+		   }
+	    if (!($scope.test=="winner"))
+		{
+		 $('.model1').show();
+		 }
+	   }
+	   
+	 
+	   $scope.clickrow = function(rowCoord)
+	   {
+		 if (($scope.player.length > 0)&& !($scope.test=="winner"))
+		 {
+		   
+		    if (rowCoord.length >0)
+			{
+				var s = rowCoord.split("");
+			  
+			    if (s[1]=="1")
+				{
+			
+					 if ($scope.row1[parseInt(s[2])-1].title=="xod")
+					 {
+						 $scope.row1[parseInt(s[2])-1].title = $scope.player;  
+						 $scope.row1[parseInt(s[2])-1].played="true";
+					 }	 
+				}
+				
+				if (s[1]=="2")
+				{
+				//row2
+				 if ($scope.row2[parseInt(s[2])-1].title=="xod")
+					 {
+						 $scope.row2[parseInt(s[2])-1].title = $scope.player;  
+						 $scope.row2[parseInt(s[2])-1].played="true";
+					 }	 
+				}
+				
+				if (s[1]=="3")
+				{
+				//row3
+				 if ($scope.row3[parseInt(s[2])-1].title=="xod")
+					 {
+						 $scope.row3[parseInt(s[2])-1].title = $scope.player;  
+						 $scope.row3[parseInt(s[2])-1].played="true";
+					 }	 
+				}
+				
+				  
+				  if ($scope.player=="X"){
+					 $scope.player="O";
+					 $scope.playing = $scope.player2;
+				}
+					 else {
+					 $scope.player="X";
+					 $scope.playing = $scope.player1;
+					 }
+		    }
+		 }
+	   }
+	   
+	   $scope.userturn = function(turn)
+	   {
+	      if (turn==null)
+		  {
+		    $('.model1').show();
+		  }
+	   }
+	   $scope.$watch('player',$scope.winner);
+	 }
+	 
+	 
+	 
+	 function inigame()
+	 {
+	     $('.model1').show();
+	 }
+	 
+	 
+	  function restart()
+	   {
+	     location.reload();
+	   }
+	 
+	</script>
+	</body>
+	</html>
